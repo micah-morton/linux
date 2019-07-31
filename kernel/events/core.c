@@ -11274,7 +11274,7 @@ perf_event_create_kernel_counter(struct perf_event_attr *attr, int cpu,
 		goto err_unlock;
 	}
 
-	perf_install_in_context(ctx, event, cpu);
+	perf_install_in_context(ctx, event, event->cpu);
 	perf_unpin_context(ctx);
 	mutex_unlock(&ctx->mutex);
 
@@ -11618,9 +11618,7 @@ void perf_event_delayed_put(struct task_struct *task)
 
 struct file *perf_event_get(unsigned int fd)
 {
-	struct file *file;
-
-	file = fget_raw(fd);
+	struct file *file = fget(fd);
 	if (!file)
 		return ERR_PTR(-EBADF);
 
